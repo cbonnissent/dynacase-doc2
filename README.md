@@ -1,3 +1,3 @@
-# Dynacase Quick Start
+# Dynacase Doc 2
 
-Tutoriel de réalisation d'une application avec Dynacase Platform 3.2
+Some tests for a doc with backbone !
