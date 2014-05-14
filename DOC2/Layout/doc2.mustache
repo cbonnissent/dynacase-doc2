@@ -1,0 +1,22 @@
+<!doctype html>
+<html lang="en-US">
+<head>
+    <meta charset="UTF-8">
+    <title>{{doc.properties.title}}</title>
+    {{# cssAsset}}
+    <link rel="stylesheet" href="{{.}}"/>
+    {{/ cssAsset}}
+</head>
+<body>
+
+</body>
+<script type="text/javascript">
+    var initialData = {{{initialData}}};
+</script>
+{{# debug}}
+    <script data-main="DOC2/js/main" src="DOC2/libs/js/require.js"></script>
+{{/debug}}
+{{^ debug}}
+    <script data-main="DOC2/js/main-built" src="DOC2/libs/js/require.js"></script>
+{{/debug}}
+</html>

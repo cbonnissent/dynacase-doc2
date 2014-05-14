@@ -1,0 +1,21 @@
+//;Father ;Title;Id;Classe;Logical Name;;;;;;;;;;;
+BEGIN;;;;;doc2_vig;;;;;;;;;;;
+CLASS;Doc2\doc2_vig;;;;;;;;;;;;;;;
+//;idattr;idframe;label;T;A;type;ord;vis;need;link;phpfile;phpfunc;elink ;constraint ;option;Commentaires
+ATTR;myw_ident;;Identification;N;N;frame;100;W;N;;;;;;;
+ATTR;myw_name;myw_ident;Nom;Y;N;text;110;W;Y;;;;;;;
+ATTR;myw_data;myw_ident;Données;N;N;array;120;W;N;;;;;;vlabel=up;
+ATTR;myw_dept;myw_data;Département;N;N;docid("doc2_dpt");130;W;N;;;;;;;
+ATTR;myw_date;myw_data;Date;N;N;date;140;W;N;;;;;;;
+ATTR;myw_vigi;;Vigilance;N;N;frame;200;W;N;;;;;;;
+ATTR;myw_level;myw_vigi;Niveau;N;N;int;210;W;Y;;;;;edittemplate=alert.mustache;;
+;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;
+END;;;;;;;;;;;;;;;;

@@ -1,0 +1,50 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: doc2_vig \n"
+"Report-Msgid-Bugs-To: \n"
+"PO-Revision-Date: 2014-05-13T13:48:39+02:00\n"
+"Last-Translator: Automatically generated\n"
+"Language-Team: none\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: en_US\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgid "doc2_vig#title"
+msgstr "doc2_vig#title"
+
+#: DOC2/doc2_vig__STRUCT.csv
+#, fuzzy
+msgid "doc2_vig#myw_ident"
+msgstr "Identification"
+
+#: DOC2/doc2_vig__STRUCT.csv
+#, fuzzy
+msgid "doc2_vig#myw_name"
+msgstr "Nom"
+
+#: DOC2/doc2_vig__STRUCT.csv
+#, fuzzy
+msgid "doc2_vig#myw_data"
+msgstr "Données"
+
+#: DOC2/doc2_vig__STRUCT.csv
+#, fuzzy
+msgid "doc2_vig#myw_dept"
+msgstr "Département"
+
+#: DOC2/doc2_vig__STRUCT.csv
+#, fuzzy
+msgid "doc2_vig#myw_date"
+msgstr "Date"
+
+#: DOC2/doc2_vig__STRUCT.csv
+#, fuzzy
+msgid "doc2_vig#myw_vigi"
+msgstr "Vigilance"
+
+#: DOC2/doc2_vig__STRUCT.csv
+#, fuzzy
+msgid "doc2_vig#myw_level"
+msgstr "Niveau"

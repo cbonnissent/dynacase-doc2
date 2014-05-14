@@ -1,0 +1,9 @@
+//FAM;dossier(DIR);<specid>;<fldid>;titre;
+ORDER;DIR;;;ba_title;
+DOC;DIR;FLD_DOC2_VIG;;FLD_DOC2_VIG;
+;;;;;
+//;Father ;Title;Id;Classe;Logical Name
+BEGIN;;Vigilance météo;;;doc2_vig
+ICON;doc2_vig.png;;;;
+DFLDID;FLD_DOC2_VIG;;;;
+END;;;;;

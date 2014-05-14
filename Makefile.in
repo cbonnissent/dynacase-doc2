@@ -1,0 +1,32 @@
+PACKAGE = @PACKAGE@
+VERSION = @VERSION@
+utildir = @PUBRULE@
+pubdir = @prefix@
+srcdir = @srcdir@
+applib = FDL
+appname = @APPNAME@
+localBuildRule = @LOCAL_BUILD_RULE@
+TAR = tar
+GZIP_ENV = --best
+
+export pubdir utildir appname applib PACKAGE localBuildRule
+
+SUBDIR = $(wildcard API)
+SUBDIR += $(wildcard EXTERNALS)
+SUBDIR += $(wildcard lib)
+SUBDIR += $(wildcard locale)
+SUBDIR += $(wildcard STYLE)
+SUBDIR += $(wildcard $(appname))
+SUBDIR += $(wildcard WHAT)
+SUBDIR += $(wildcard config)
+SUBDIR += $(wildcard Images)
+
+include $(utildir)/PubRule
+
+# For all families traduction
+TRANSFAM += $(shell find . -name "*.csv")
+# TRANSCSV +=
+
+clean:
+	/bin/rm -f *.*~ config.* Makefile configure CNES_SERVICE_RH/CNES_SERVICE_RH_init.php info.xml $(PACKAGE)-*webinst
+	/bin/rm -fr autom4te.cache

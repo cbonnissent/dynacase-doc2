@@ -1,0 +1,1 @@
+Add your [style](https://docs.anakeen.com/dynacase/3.2/dynacase-doc-core-reference/website/book/core-ref:1844a1a8-1406-47bd-a884-1a18ef0a6ca7.html#core-ref:1844a1a8-1406-47bd-a884-1a18ef0a6ca7) here

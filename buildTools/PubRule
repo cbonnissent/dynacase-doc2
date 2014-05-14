@@ -1,0 +1,163 @@
+##----------------------------------------------------
+## -- Commands
+##----------------------------------------------------
+
+installcp = cp -f
+
+ifndef TAR
+TAR=tar
+endif
+
+##----------------------------------------------------
+## -- end commands
+##----------------------------------------------------
+
+##----------------------------------------------------
+## -- Globals
+##----------------------------------------------------
+
+ifndef VERSION
+VERSION=$(shell cat VERSION)
+endif
+
+ifndef RELEASE
+RELEASE=$(shell cat RELEASE)
+endif
+
+FULLNAME = $(PACKAGE)-$(VERSION)-$(RELEASE)
+
+##----------------------------------------------------
+## -- end Globals
+##----------------------------------------------------
+
+##----------------------------------------------------
+## -- Webinst
+##----------------------------------------------------
+
+WEBINST_ROOTFILES = info.xml $(wildcard LICENSE)
+
+webinst: po-check
+	$(eval WEBINST_TEMPDIR := $(shell mktemp -d -t build.XXXXXX))
+	mkdir -p $(WEBINST_TEMPDIR)/localpub/
+	# Publish files into temp dir
+	make pubdir=$(WEBINST_TEMPDIR)/localpub/ publish
+	# add required files for webinst generation
+	for file in $(WEBINST_ROOTFILES) ; do \
+		cp -a $$file $(WEBINST_TEMPDIR)/ ;\
+	done
+	# generate content.tar.gz
+	GZIP=$(GZIP_ENV) $(TAR) -C $(WEBINST_TEMPDIR)/localpub -czf $(WEBINST_TEMPDIR)/content.tar.gz .
+	# generate webinst
+	GZIP=$(GZIP_ENV) $(TAR) -C $(WEBINST_TEMPDIR) -czf $(FULLNAME).webinst content.tar.gz $(WEBINST_ROOTFILES)
+	-rm -fr $(WEBINST_TEMPDIR)
+
+##----------------------------------------------------
+## -- end Webinst
+##----------------------------------------------------
+
+##----------------------------------------------------
+## -- gettext translation
+##----------------------------------------------------
+
+ifndef LANGS
+LANGS=en_US.UTF8 fr_FR.UTF8
+endif
+
+ifndef TRANSFAM
+TRANSFAM =
+endif
+
+ifndef PHPPOFIND
+PHPPOFIND = .
+endif
+
+ifndef LAYOUTPOFIND
+LAYOUTPOFIND = .
+endif
+
+ifndef JSPOFIND
+JSPOFIND = .
+endif
+
+ifndef PODIR
+PODIR = locale
+endif
+
+APP_POT = $(appname)_app.pot
+LAYOUT_POT = $(appname)_layout.pot
+PHP_POT = $(appname)_php.pot
+JS_POT = $(appname)_js.pot
+FAM_POT_DIR = $(PODIR)/fam_pot
+
+po:
+	@echo Extracting from PHP from $(PHPPOFIND)
+	@find $(PHPPOFIND) -type f \( -name "*.app" -o -name "*.php" \) \
+	| $(utildir)/xgettextPhp -o $(APP_POT) -f-
+
+	@echo Extracting from layout from $(LAYOUTPOFIND)
+	@find $(LAYOUTPOFIND) \( -name "*.xml" -o -name "*.js" -o -name "*.html" \) \
+	| $(utildir)/xgettextLayout --force-po -o $(LAYOUT_POT) -f -
+
+	@echo Extracting from Js from $(JSPOFIND)
+	@find $(JSPOFIND) \( -name "*.js" -o -name "*.html" \) \
+	| $(utildir)/xgettextJs -o $(JS_POT) -f-
+
+	@echo Extracting from Families
+	mkdir -p "$(FAM_POT_DIR)"
+	@$(utildir)/xgettextFamily -o "$(FAM_POT_DIR)" $(TRANSFAM);
+	for fam_pot in `find "$(FAM_POT_DIR)" -name "*.pot"`; do \
+		msguniq -o "$$fam_pot.tmp" "$$fam_pot"; \
+		mv "$$fam_pot.tmp" "$$fam_pot"; \
+	done
+
+	echo "LANGS = '$(LANGS)'";
+
+	for LL_CC in $(LANGS); do \
+		\
+		SHORT_LANG="$${LL_CC%%_*}"; \
+		currentLocalePhpDir="$(PODIR)/$$SHORT_LANG/LC_MESSAGES/src"; \
+		currentLocaleJsDir="$(PODIR)/$$SHORT_LANG/js/src"; \
+		\
+		mkdir -p "$$currentLocalePhpDir"; \
+		\
+		echo "generating families po files into $$LL_CC"; \
+		$(utildir)/lib/updatePoFamily.bash "$(FAM_POT_DIR)" $$LL_CC "$$currentLocalePhpDir"; \
+		\
+		echo "generating application po file into $$LL_CC"; \
+		msgcat "$(APP_POT)" "$(LAYOUT_POT)" > "$(PHP_POT)"; \
+		$(utildir)/lib/updatePoFile.bash "$(PHP_POT)" $$LL_CC "$$currentLocalePhpDir/$(appname).po"; \
+		\
+		echo "generating js po file into $$LL_CC"; \
+		if [ -f "$(JS_POT)" ]; then \
+			mkdir -p "$$currentLocaleJsDir"; \
+			$(utildir)/lib/updatePoFile.bash "$(JS_POT)" $$LL_CC "$$currentLocaleJsDir/$(appname).po"; \
+		fi; \
+	done
+
+	[ -e "$(APP_POT)" ] && rm -f "$(APP_POT)" || true
+	[ -e "$(LAYOUT_POT)" ] && rm -f "$(LAYOUT_POT)" || true
+	[ -e "$(PHP_POT)" ] && rm -f "$(PHP_POT)" || true
+	[ -e "$(JS_POT)" ] && rm -f "$(JS_POT)" || true
+	[ -e "$(FAM_POT_DIR)" ] && rm -rf "$(FAM_POT_DIR)" || true
+
+po-check:
+	@echo Checking po files syntax
+
+	po_syntax_errors=0; \
+	for catalog in `find locale -name '*.po'`; do \
+		msgfmt -c -o - $$catalog >/dev/null; \
+		if [ $$? -gt 0 ]; then \
+			po_syntax_errors=1; \
+		fi; \
+	done; \
+	if [ $$po_syntax_errors -gt 0 ]; then \
+	        echo some po files contains errors; \
+	        exit 1; \
+	fi
+
+##----------------------------------------------------
+## -- end gettext translation
+##----------------------------------------------------
+
+publish:
+	$(TAR) --exclude="Makefile" --exclude="*.in" -cf - $(SUBDIR) | $(TAR) -C $(pubdir) -xpf -

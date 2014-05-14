@@ -1,0 +1,1 @@
+Add your [helper](https://docs.anakeen.com/dynacase/3.2/dynacase-doc-core-reference/website/book/core-ref:f5708494-27c1-4bc9-8f2d-03b2ce4eb31d.html#core-ref:f5708494-27c1-4bc9-8f2d-03b2ce4eb31d) code here

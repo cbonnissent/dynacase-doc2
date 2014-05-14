@@ -1,0 +1,29 @@
+<?xml version="1.0"?>
+<module name="DOC2" disabled="no" version="1.0.0" release="0">
+
+    <description>Cogip audit application</description>
+
+    <requires>
+        <module comp='ge' version='3.2' name='dynacase-core'/>
+    </requires>
+
+    <post-install>
+        <process command="programs/record_application DOC2"/>
+        <process command="./wsh.php --api=importDocuments --file=./DOC2/doc2_dpt__STRUCT.csv"/>
+        <process command="./wsh.php --api=importDocuments --file=./DOC2/doc2_dpt__PARAM.csv"/>
+        <process command="./wsh.php --api=importDocuments --file=./DOC2/doc2_vig__STRUCT.csv"/>
+        <process command="./wsh.php --api=importDocuments --file=./DOC2/doc2_vig__PARAM.csv"/>
+    </post-install>
+
+    <post-upgrade>
+        <process command="programs/pre_migration DOC2"/>
+        <process command="programs/record_application DOC2"/>
+        <process command="./wsh.php --api=importDocuments --file=./DOC2/doc2_dpt__STRUCT.csv"/>
+        <process command="./wsh.php --api=importDocuments --file=./DOC2/doc2_dpt__PARAM.csv"/>
+        <process command="./wsh.php --api=importDocuments --file=./DOC2/doc2_vig__STRUCT.csv"/>
+        <process command="./wsh.php --api=importDocuments --file=./DOC2/doc2_vig__PARAM.csv"/>
+        <process command="programs/post_migration DOC2"/>
+        <process command="programs/update_catalog"/>
+    </post-upgrade>
+
+</module>

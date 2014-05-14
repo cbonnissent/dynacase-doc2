@@ -1,0 +1,123 @@
+body { 
+    padding-top: 55px; 
+}
+
+.css-document-icon {
+    padding : 0;
+}
+
+.css-document-icon > img {
+    height: 30px;
+    margin-top: 15px;
+}
+
+.css-document-title {
+    position: absolute;
+    left: -0.5em;
+    margin-top: 0;
+    font-weight: bold;
+    z-index: 100;
+}
+
+.css-document-menu > .navbar-nav > li > a {
+    padding-top: 20px;
+    padding-bottom: 10px;
+}
+
+.css-frame,.css-array {
+    margin-bottom: 5px;
+}
+
+.css-frame-head,.css-array-head {
+    padding: 0 15px;
+}
+
+.css-frame-body,.css-array-body {
+    padding: 5px;
+}
+
+.css-array-content {
+    margin-bottom: 0;
+}
+
+.css-attr-label {
+    padding-right: 0;
+}
+
+
+
+.css-attr-content-list {
+    padding: 0;
+    list-style: none;
+    margin: 0;
+}
+
+@media (min-width: 770px) { 
+    .css-attr-label {
+        text-align: right;
+    }
+    .css-attr-content {
+        padding-left: 5px;
+    }
+ }
+
+.css-attr-label:after {
+    content : " :";
+}
+
+.css-attr-content > .form-control, .form-control.k-input {
+    height: 1.42em;
+    line-height: 1.12em;
+    padding: 1px 12px;
+    text-indent: 0;
+    width : 15em;
+}
+
+.css-attr-content > input.form-control {
+    height: 25px;
+}
+
+.css-attr-content > textarea.form-control {
+    height: auto;
+}
+
+.css-attr-content > .form-control, .k-header {
+    background-color : inherit;
+}
+
+.css-attr-content .k-picker-wrap .k-select, .css-attr-content .k-numeric-wrap .k-select, .css-attr-content .k-dropdown-wrap .k-select {
+    min-height: 1.42em;
+    line-height: 1.64em;
+}
+
+.k-widget.form-control {
+    padding: 0;
+}
+
+.css-attr.form-group {
+    margin-bottom: 2px;
+}
+
+.css-attr-label > label {
+    font-weight : normal;
+}
+
+.css-attr-content .k-multiselect-wrap {
+    min-height: inherit;
+}
+
+.css-attr-content .k-multiselect-wrap .k-input  {
+    height: 0.8em;
+    line-height: 0.6em;
+}
+
+.css-attr-content .k-multiselect-wrap .k-button {
+    line-height: 0.4em;
+    padding: 0.05em 0.15em 0.05em 0.4em;
+    margin: 1px 0 0 1px;
+}
+
+.css-attr-content .k-multiselect-wrap .k-delete {
+    width: 14px;
+    height: 14px;
+}

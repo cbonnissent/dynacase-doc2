@@ -1,0 +1,1 @@
+Add your [script files](https://docs.anakeen.com/dynacase/3.2/dynacase-doc-core-reference/website/book/core-ref:1566c46d-a53d-44cf-8c3f-0d0e21c0b117.html#core-ref:4df1314f-9fdd-4a7f-af37-a18cc39f3505) here.

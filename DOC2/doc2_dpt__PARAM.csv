@@ -1,0 +1,9 @@
+//FAM;dossier(DIR);<specid>;<fldid>;titre;
+ORDER;DIR;;;ba_title;
+DOC;DIR;FLD_DOC2_DPT;;FLD_DOC2_DPT;
+;;;;;
+//;Father ;Title;Id;Classe;Logical Name
+BEGIN;;Département;;;doc2_dpt
+ICON;doc2_dpt.png;;;;
+DFLDID;FLD_DOC2_DPT;;;;
+END;;;;;

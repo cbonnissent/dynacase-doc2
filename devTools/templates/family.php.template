@@ -1,0 +1,12 @@
+<?php
+
+namespace $namespace;
+use \Dcp\AttributeIdentifiers\$familyClass as MyAttributes;
+
+Class $familyClass extends $fromClass
+{
+
+
+
+}
+?>

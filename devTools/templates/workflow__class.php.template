@@ -1,0 +1,39 @@
+<?php
+
+namespace $namespace;
+
+class $workflowClass extends \Dcp\Family\WDoc
+{
+    public $attrPrefix = 'FIXME' //FIXME: set attrPrefix
+    public $firstState = self::E1;
+    public $viewlist = "none";
+
+    //region MyAttributes-constants
+    //endregion
+
+    //region States
+    const E1 = 'FIXME' //FIXME: set E1
+    //endregion
+
+    //region Transitions
+    const T1 = 'FIXME' //FIXME: set T1
+    //endregion
+
+
+    public $stateactivity = array(
+        //FIXME: set stateactivity
+    );
+
+
+    public $transitions = array(
+        //FIXME: set transitions
+    );
+
+    public $cycle = array(
+        //FIXME: set cycle
+    );
+
+
+
+}
+?>
