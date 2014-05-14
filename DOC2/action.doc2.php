@@ -20,6 +20,8 @@ function doc2(Action &$action) {
         "attributes" => array()
     );
 
+    $templates = array();
+
     //Get the doc
     $currentDoc = new_Doc("", $id);
     if (!$currentDoc->isAlive()) {
@@ -50,18 +52,30 @@ function doc2(Action &$action) {
         if (isset($doc["attributes"][$currentId])) {
             continue;
         }
+        $options = $currentFieldAttribute->getOptions();
         $doc["attributes"][$currentId] = array(
             "id" => $currentId,
             "type" => $currentFieldAttribute->type,
             "label" => $currentFieldAttribute->getLabel(),
             "order" => $currentFieldAttribute->ordered,
             "children" => array(),
-            "options" => $currentFieldAttribute->getOptions()
+            "options" => $options
         );
+        if (isset($options["edittemplate"])) {
+            $templateName = basename($options["edittemplate"], ".mustache");
+            $data = array();
+            if (method_exists($doc, $templateName)) {
+                $data = $doc->$templateName();
+            }
+            $serverData = array_merge($data, $doc->getDefaultKeys());
+            $templates[$templateName] = prepareTemplates($options["edittemplate"], $serverData);
+            $doc["attributes"][$currentId]["templateData"] = $data;
+        }
         foreach($normalAttributes as $currentChild) {
             /* @var NormalAttribute $currentChild */
             if ($currentChild->fieldSet->id === $currentId) {
-                $doc["attributes"][$currentId]["children"][$currentChild->id] = analyzeAttribute($currentDoc, $currentChild, $normalAttributes);
+                $doc["attributes"][$currentId]["children"][$currentChild->id] = analyzeAttribute($currentDoc,
+                    $currentChild, $normalAttributes, $templates);
             }
         }
         if (!empty($doc["attributes"][$currentId]["children"])) {
@@ -86,17 +100,30 @@ function doc2(Action &$action) {
         "initialData" => json_encode($doc, JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_AMP),
         "doc" => $doc,
         "cssAsset" => $cssAsset,
-        "debug" => $debug
+        "debug" => $debug,
+        "templates" => json_encode($templates, JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_AMP)
     ));
     $action->lay->noparse = true;
 }
 
-function analyzeAttribute(Doc &$doc, NormalAttribute &$attribute, &$normalAttributes)
+function analyzeAttribute(Doc &$doc, NormalAttribute &$attribute, &$normalAttributes, &$templates)
 {
     $currentId = $attribute->id;
     $formattedValue = $doc->getTextualAttrValue($currentId);
     if ($attribute->isMultiple()) {
         $formattedValue = explode("\n", $formattedValue);
+    }
+    $options = $attribute->getOptions();
+    if (isset($options["edittemplate"])) {
+        $templateName = basename($options["edittemplate"], ".mustache");
+        $data = array();
+        if (method_exists($doc, $templateName)) {
+            $data = $doc->$templateName();
+        }
+        $serverData = array_merge($data, $doc->getDefaultKeys());
+        $templates[$templateName] = prepareTemplates($options["edittemplate"], $serverData);
+        $options["templateData"] = $data;
+        $options["template"] = $templateName;
     }
     $return = array(
         "id" => $currentId,
@@ -106,7 +133,7 @@ function analyzeAttribute(Doc &$doc, NormalAttribute &$attribute, &$normalAttrib
         "value" => $doc->getAttributeValue($currentId),
         "multiple" => $attribute->isMultiple(),
         "formattedValue" => $formattedValue,
-        "options" => $attribute->getOptions()
+        "options" => $options
     );
     $childAttributes = array_filter($normalAttributes, function ($attribute) use ($currentId) {
         if (!is_a($attribute, "NormalAttribute")) {
@@ -119,7 +146,7 @@ function analyzeAttribute(Doc &$doc, NormalAttribute &$attribute, &$normalAttrib
         $return["children"] = array();
     }
     foreach ($childAttributes as $currentChild) {
-        $return["children"][$currentChild->id] = analyzeAttribute($doc, $currentChild, $normalAttributes);
+        $return["children"][$currentChild->id] = analyzeAttribute($doc, $currentChild, $normalAttributes, $templates);
     }
     if (!empty($return["children"])) {
         usort($return["children"], function ($attribute1, $attribute2) {
@@ -128,3 +155,15 @@ function analyzeAttribute(Doc &$doc, NormalAttribute &$attribute, &$normalAttrib
     }
     return $return;
 };
+
+function prepareTemplates($filePath, $values) {
+    $mustacheRender = new Mustache_Engine(array(
+        'helpers' => array(
+            'i18n' => function ($text) {
+                    return _($text);
+                },
+        ),
+    ));
+    $pubDir = \ApplicationParameterManager::getScopedParameterValue("CORE_PUBDIR", DEFAULT_PUBDIR);
+    return $mustacheRender->render("{{=[ ]=}}\n" . file_get_contents($pubDir.$filePath), $values);
+}

@@ -10,7 +10,7 @@ define([
 ], function (_, Backbone, Mustache, ViewAttributeText, ViewAttributeInt, ViewAttributeDate, ViewAttributeDocid) {
     'use strict';
 
-    return Backbone.View.extend({
+    var AttributeView = Backbone.View.extend({
 
         className : "row css-attr attr",
 
@@ -20,9 +20,20 @@ define([
             this.template = this.model.get("template") || window.dcp.template.label_attr;
         },
 
-        render : function () {
+        render : function (inTemplate) {
             var contentView;
             this.$el.append($(Mustache.render(this.template, this.model.toJSON())));
+            if (!inTemplate && this.model.get("options")["template"]) {
+                this.$el.append($(Mustache.render(window.templates[this.model.get("options")["template"]], this.model.toJSON().options.templateData)));
+                this.$el.find(".js-attr-target").each(function() {
+                    var $this = $(this), attrid, currentAttr, currentView;
+                    attrid = $this.data("attrid");
+                    currentAttr = window.dcp.document.get("attributes").get(attrid);
+                    currentView = new AttributeView({model : currentAttr});
+                    $this.append(currentView.render(true).$el);
+                });
+                return this;
+            }
             if (this.model.get("type") === "text") {
                 contentView = new ViewAttributeText({model : this.model});
                 this.$el.append(contentView.render().$el);
@@ -43,5 +54,7 @@ define([
             this.$el.find(".attr--label").text(this.model.get("label"));
         }
     });
+
+    return AttributeView;
 
 });
